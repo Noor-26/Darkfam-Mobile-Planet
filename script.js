@@ -11,7 +11,7 @@ const getPhoneName = () => {
 // function of displaying the phones
 
 const displayPhone = phones => {
-    console.log(phones);
+    // console.log(phones);
     const mainDiv = document.getElementById('display-phone')
     phones.forEach(phone => {
         const div = document.createElement('div')
@@ -22,7 +22,7 @@ const displayPhone = phones => {
             <div class="card-body text-center">
               <h5 class="card-title">Name : ${phone.phone_name}</h5>
               <h6>Brand : ${phone.brand}</h6>
-              <button class="btn btn-success">Detail</button>
+              <button class="btn btn-success" onclick="displayOneItem('${phone.slug}')">Detail</button>
             </div>
           </div>
         </div>
@@ -31,4 +31,11 @@ const displayPhone = phones => {
     });
 }
 
+// displaying selected item
+
+const displayOneItem = id => {
+    fetch(`https://openapi.programming-hero.com/api/phone/${id}`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+}
 
