@@ -1,6 +1,7 @@
 const getPhoneName = () => {
     const searchInput = document.getElementById('search-input')
-    const searchValue = searchInput.value;   
+    const searchValue = searchInput.value;
+    searchInput.value = ''   
 
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchValue}`
     fetch(url)
@@ -12,6 +13,7 @@ const getPhoneName = () => {
 
 const displayPhone = phones => {
   const mainDiv = document.getElementById('display-phone')
+  mainDiv.textContent = ''
     let i = 0
       phones.forEach(phone => {
         i++
@@ -44,11 +46,19 @@ const loadOneItem = id => {
     .then(data => displayOneItem(data.data))
 }
 
+
 const selectedDiv = document.getElementById('selected-item')
 selectedDiv.style.display = 'none'
 
 const displayOneItem = phoneId => {
+  selectedDiv.textContent = ""
   console.log(phoneId);
+  let release = phoneId.releaseDate
+
+     if (release == '') {
+  release = "Release date not found"
+    }
+
   selectedDiv.style.display = "grid"
   const div = document.createElement('div')
   div.innerHTML = `
@@ -59,15 +69,15 @@ const displayOneItem = phoneId => {
           <div class="col-md-8">
             <div class="card-body ">
             
-              <h5 class="card-title text-center">Name : ${phoneId.name}</h5>
-              <p class="text-center">release date : ${phoneId.releaseDate}</p>
+              <h5 class="card-title text-center">${phoneId.name}</h5>
+              <p class="text-center" id="releaseDate">${release}</p>
 
               <div >
               <h5>Main features</h5>
                 <p>Memory : ${phoneId.mainFeatures.memory}</p>
                 <p>Chipset : ${phoneId.mainFeatures.chipSet} </p>
                 <p>Display size : ${phoneId.mainFeatures.displaySize} </p>
-                <p>Storage : ${phoneId.storage}</p> 
+                <p>Storage : ${phoneId.mainFeatures.storage}</p> 
               </div>
               <h5>Sensors</h5>
               <div id="sensors">
@@ -75,32 +85,52 @@ const displayOneItem = phoneId => {
               </div>
               
               <h5 class="mt-3">Other features</h5>
-              <p>Bluetooth : ${phoneId.others.Bluetooth}</p>
-              <p>GPS : ${phoneId.others.GPS}</p>
-              <p>NFC : ${phoneId.others.NFC}</p>
-              <p>Radio : ${phoneId.others.Radio}</p>
-              <p>USB : ${phoneId.others.USB}</p>
-              <p>WLAN : ${phoneId.others.WLAN}</p>
-
+              <div id="others">
+              
+              </div>
               
             </div>
           </div>
         </div>
   `
+  
   selectedDiv.appendChild(div)
-  showSensors(phoneId.mainFeatures.sensors)
+  showSensors(phoneId.mainFeatures.sensors )
+  othersname(phoneId.others)
 }
 
 const showSensors = sensors =>{
   const ul = document.createElement('ul')
   const sensorId = document.getElementById('sensors')
+  
   sensors.forEach(sensor => {
     const li = document.createElement('li')
     li.innerHTML = sensor  
     ul.appendChild(li)
   });
-
+  
   sensorId.innerHTML = ul.innerHTML
 }
+
+
+const othersname = idName => {
+  const otherId = document.getElementById('others')
+
+  const div = document.createElement('div')
+  for (const other in idName) {
+    const p = document.createElement('p')
+    p.innerHTML = `
+    ${other} : ${idName[other]}
+    `
+    div.appendChild(p)
+  }
+ otherId.innerHTML = div.innerHTML
+
+ // massage of no other features 
+ if (otherId.innerHTML == '') {
+  otherId.innerHTML = "Other features not avalaible"
+ }
+}
+
 
 
