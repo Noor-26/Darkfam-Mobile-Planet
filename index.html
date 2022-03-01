@@ -20,7 +20,12 @@
     <!-- input field and button  -->
     <div class="input-group mb-3 container">
         <input type="text" class="form-control" placeholder="Search your phone"  id="search-input" aria-label="Recipient's username" aria-describedby="button-addon2">
-        <button class="btn btn-outline-info text-white btn-info" type="button" id="button-addon2" onclick="getPhoneName()">Search</button>
+        <button class="btn " type="button" id="button-search" onclick="getPhoneName()">Search</button>
+      </div>
+
+      <!-- spinner section -->
+      <div class="spinner-border text-info mx-auto my-4  " role="status" id="load" >
+        <span class="visually-hidden ">Loading...</span>
       </div>
 
       <!-- error massages -->

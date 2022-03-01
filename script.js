@@ -1,9 +1,17 @@
 const emptyText = document.getElementById('empty-input');
 const emptyItem = document.getElementById('empty-item');
+const selectedDiv = document.getElementById('selected-item')
+
+const spinner = document.getElementById('load')
+function loadPage(displayStyle){
+   spinner.style.display = displayStyle;
+}
 
 const getPhoneName = () => {
   const searchInput = document.getElementById('search-input')
   const searchValue = searchInput.value;
+
+  loadPage('block')
 
     const url = `https://openapi.programming-hero.com/api/phones?search=${searchValue}`
    fetch(url)
@@ -12,6 +20,8 @@ const getPhoneName = () => {
   
    if (searchValue.length == 0) {
      emptyText.style.display ="block"
+     selectedDiv.textContent = ""
+     selectedDiv.style.border = 'none'
    }
    else{
     emptyText.style.display ="none"
@@ -30,10 +40,10 @@ const displayPhone = phones => {
 
   if(phones.length==0 && searchValue.length >0 ){
  emptyItem.style.display = "block"
+ selectedDiv.textContent = ""
 }
 else{
  emptyItem.style.display = "none"
-}
 
   phones.forEach(phone => {
       i++;
@@ -44,9 +54,9 @@ else{
             <div class="card h-100">
             <img src="${phone.image}" class="card-img-top p-5" alt="...">
             <div class="card-body text-center">
-            <h5 class="card-title">Name : ${phone.phone_name}</h5>
+            <h5 class="card-title">${phone.phone_name}</h5>
                   <h6>Brand : ${phone.brand}</h6>
-                  <button class="btn btn-success" onclick="loadOneItem('${phone.slug}')">Detail</button>
+                  <button class="btn" id="btn-details" onclick="loadOneItem('${phone.slug}')">See details</button>
                 </div>
               </div>
             </div>
@@ -54,6 +64,8 @@ else{
         mainDiv.appendChild(div)
       }
     });
+  }
+  loadPage('none')
 
     //input of search Value deleted
    searchInput.value = ''
@@ -68,9 +80,9 @@ const loadOneItem = id => {
 }
 
 const displayOneItem = phoneId => {
-  const selectedDiv = document.getElementById('selected-item')
   selectedDiv.style.display = "grid"
   selectedDiv.textContent = ""
+
   let release = phoneId.releaseDate
 
   //release date error solved
